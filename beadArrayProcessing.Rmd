@@ -1,0 +1,55 @@
+---
+title: "SNP and CNV Analysis using beadArraySNP"
+author: "Carlos Ramirez"
+date: "August 25, 2017"
+output: html_document
+---
+
+
+En este reporte incluyo el importe de los datos de SNPs obtenidos de los beadarray de la plataforma Illumina GoldenGate a R mediante el uso del paquete beadArraySNP.
+
+## Tipos de datos proveídos por Illumina
+
+### El archivo .opa
+
+El archivo .opa contiene información del tipo de SNP analizado, los oligos usados, ubicación cromosómica y detalles de anotación del organismo como se muestra en el siguiente output.
+
+
+```{r}
+pathOpa <- "~/dataBases/GoldenGate_U15_025 AT/GenomeStudio/GS0014416-OPA.opa"
+readLines(pathOpa,n = 13)
+```
+
+### Archivo SampleSheet.csv
+
+El archivo SampleSheet_ID.csv contiene información acerca de los IDs de cada beadArray y su posición en el arreglo. En la [documentación](https://bioconductor.org/packages/devel/bioc/vignettes/beadarraySNP/inst/doc/beadarraySNP.pdf) de beadArraySNP este archivo corresponde al archivo 4samples_opa4.csv.
+
+La información incluida en SampleSheet_ID.csv se muestra a continuación.
+
+```{r}
+pathSampleSheet <- "~/dataBases/GoldenGate_U15_025 AT/GenomeStudio/SampleSheet_ID.csv"
+readLines(pathSampleSheet,n=13)
+```
+
+### Importe de datos a BeadArraySNP
+
+El siguiente código es un intento por cargar los datos a beadArraySNP basado en las siguientes [notas](https://support.bioconductor.org/p/25142/), [véase también](https://rdrr.io/bioc/beadarraySNP/man/read.SnpSetIllumina.html).
+
+
+```{r message=FALSE}
+library(beadarraySNP)
+
+## rutas a archivos locales
+path2SampleMap <- "~/scripts/autismProject/Sample_Map.txt"
+path2report <- "~/scripts/autismProject/autism_FinalReport.txt"
+
+## Cargando datos
+SNPData <- read.SnpSetIllumina(Sample_Map2Samplesheet(path2SampleMap),
+                               reportfile = path2report)
+
+```
+
+
+```{r}
+reportGenomeIntensityPlot(SNPData,smoothing = "mean")
+```
