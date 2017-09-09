@@ -1,0 +1,47 @@
+---
+title: "Tutorial BeadArraySNP"
+author: "Carlos Ramirez"
+date: "September 9, 2017"
+output: html_document
+---
+
+## Cargando los datos
+
+```{r}
+library(beadarraySNP)
+
+datadir <- system.file("testdata", package="beadarraySNP")
+datasheet <- paste(datadir,"4samples_opa4.csv",sep="/")
+
+## snp tutorial data
+SNPData.t <- read.SnpSetIllumina(datasheet,datadir) 
+```
+
+## Exploración del objeto SNPData
+
+Composición del objeto SNPData:
+
+```{r}
+slotNames(SNPData.t)
+```
+
+### assayData
+
+assayData contiene la información de flourescencia:
+* call - la genotipificación del SNP
+* callProbability - la probabilidad de que el llamado sea correcto.
+* G - la intensidad verde.
+* R - la intensidad azul.
+
+```{r}
+names(assayData(SNPData.t))
+```
+
+```{r}
+head(assayData(SNPData.t)$call)
+```
+
+```{r}
+
+```
+

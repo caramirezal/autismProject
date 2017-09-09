@@ -40,8 +40,8 @@ El siguiente código es un intento por cargar los datos a beadArraySNP basado en
 library(beadarraySNP)
 
 ## rutas a archivos locales
-path2SampleMap <- "~/scripts/autismProject/Sample_Map.txt"
-path2report <- "~/scripts/autismProject/autism_FinalReport.txt"
+path2SampleMap <- "~/scripts/autismProject/data/Sample_Map.txt"
+path2report <- "~/scripts/autismProject/data/autism_FinalReport.txt"
 
 ## Cargando datos
 SNPData <- read.SnpSetIllumina(Sample_Map2Samplesheet(path2SampleMap),
@@ -49,7 +49,46 @@ SNPData <- read.SnpSetIllumina(Sample_Map2Samplesheet(path2SampleMap),
 
 ```
 
+SNPData es un objeto de clase 3*?* que contiene los siguientes slots:
 
 ```{r}
-reportGenomeIntensityPlot(SNPData,smoothing = "mean")
+slotNames(SNPData)
 ```
+
+```{r}
+names(assayData(SNPData))
+```
+
+### Exploración del objeto SNPData
+
+```{r}
+assayData(SNPData)$call[1:3,1:5]
+``` 
+
+```{r}
+assayData(SNPData)$callProbability[1:4,1:4]
+```
+
+Las asignaciones alélicas y sus probabilidades están vacías. PROBLEMA. En el [training](https://support.illumina.com/array/array_software/genomestudio/training.html) de Illumina como asignar valores AA, AB, etc.. de los valores theta. Sin embargo en los datos input proveídos por Illumina en el 
+campo call los valores de la matriz son A, B o H. H tal vez refiere a los
+heterocigotos.
+
+```{r}
+assayData(SNPData)$G[1:3,1:5]
+```
+
+```{r}
+assayData(SNPData)$R[1:3,1:5]
+```
+
+```{r}
+assayData(SNPData)$Theta[1:3,1:5]
+```
+
+
+```{r}
+heatmap(assayData(SNPData)$Theta,Colv = NA)
+```
+
+Es probable que 2-4 grupos observados en los renglones representen los 
+SNPs posibles AA, BB o AB.
