@@ -1,0 +1,50 @@
+---
+title: "Manhattan plot"
+output:
+  pdf_document: default
+  html_notebook: default
+---
+
+## Data processing
+
+This report shows how to create a Manhattan plot from plink ped files. The next code show how to create a genetic association analysis in simulated data that can be downloaded [here](http://zzz.bwh.harvard.edu/plink/hapmap1.zip). First, plink is used to perform an association analysis using chi-square test of two populations.
+
+```{r message=FALSE}
+## make bed files from ped genomic data
+## note that hapmap1/hapmap1 path most be edited to
+## the local path where ped file is stored
+makeBed <- 'plink1 --file tutorial_plink/hapmap1/hapmap1 --make-bed --out data/alleles'
+system(makeBed)
+
+## execute association analysis
+association <- 'plink1 --bfile data/alleles --assoc --out data/alleles'
+system(association)
+```
+
+Next, the result is loaded into R for visualization. The next table shows the top 6 SNPs with bigger chi-square values. 
+
+```{r}
+library(dplyr)
+library(ggplot2)
+
+## reading plink association analysis result to R
+alleles <- read.table("data/alleles.assoc",
+                   header = TRUE,
+                   stringsAsFactors = FALSE)
+
+alleles.sort <- arrange(alleles,desc(CHISQ))
+head(alleles.sort)
+```
+
+## Visualization
+
+The next plot shows a Manhattn plot for the above data.
+
+```{r}
+## plotting result
+g <- ggplot(data = alleles, aes(BP,CHISQ,colour=as.factor(CHR) ) ) 
+g <- g + geom_point()
+plot(g)
+```
+
+
