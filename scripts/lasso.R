@@ -2,7 +2,11 @@ library(dplyr)
 library(caret)
 library(glmnet)
 
+## extractting alleles data using plink. Change local paths
+## plink --file <dataPath> --recodeAD --out <outputFile>
+## change your local paths
 #extractAlleles <- "plink --file /media/carlos/SoMobileOTB/Arrays/PsychArray\ AT\ 5p/U15_118_Placa5/PLINK/PLINK_060117_0128/PLINK --chr 2 --from-kb 1000 --to-kb 1100  --recodeAD --out data/extractedSNPsPlink"
+#system(extractaAlleles)
 
 ## pre reading
 alleles <- readLines("~/data/extractedSNPsPlink.raw",n=2)
